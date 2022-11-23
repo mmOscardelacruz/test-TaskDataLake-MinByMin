@@ -2,7 +2,7 @@ import { BindOrReplacements, QueryTypes, Sequelize } from 'sequelize';
 
 import config from '../../src/config';
 
-const { dbHost, dbName, dbPassword, dbPort, dbUser } = config;
+const { dbHost, dbName, dbPassword, dbPort, dbUser } = config.db;
 
 export const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   dialect: 'postgres',
