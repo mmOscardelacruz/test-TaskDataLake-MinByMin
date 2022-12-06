@@ -1,7 +1,8 @@
-import { devicesCron, exceptionsCron } from './crons';
+import { alertsReportCron, canEventsReportCron, DebugControllers, minByMinReportCron, safetyReportCron } from './crons';
 
-// init devicescron
-devicesCron.start();
+// safetyReportCron.start();
+// minByMinReportCron.start();
+// canEventsReportCron.start();
+// alertsReportCron.start();
 
-// init bla bla bla cron
-exceptionsCron.start();
+DebugControllers.start();

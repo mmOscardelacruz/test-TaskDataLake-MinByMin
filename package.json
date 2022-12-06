@@ -15,8 +15,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/bluebird": "^3.5.38",
     "@types/cron": "^2.0.0",
     "@types/jest": "^29.2.3",
+    "@types/jsonwebtoken": "^8.5.9",
+    "@types/lodash": "^4.14.190",
     "@types/node": "^18.11.9",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
@@ -35,8 +38,13 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
+    "axios": "^0.27.2",
+    "bluebird": "^3.7.2",
     "cron": "^2.1.0",
     "dotenv": "^16.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "moment-timezone": "^0.5.39",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.25.6"

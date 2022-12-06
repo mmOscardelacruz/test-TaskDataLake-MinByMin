@@ -1,4 +1,4 @@
-export interface AlertsSpeedRelenti {
+export interface TelemetryAlerts {
   VWERK: string;
   NUM_ECON: string;
   LATITUD: number;
@@ -9,6 +9,5 @@ export interface AlertsSpeedRelenti {
   Indicador: string;
   TimeStart: string;
   TimeEnd: string;
-  Equipment: number;
-  ID_PROV: string;
+  Equipment: string;
 }

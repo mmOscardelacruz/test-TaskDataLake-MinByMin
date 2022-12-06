@@ -11,7 +11,7 @@ export const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
   logging: false,
   dialectOptions: {
     supportBigNumbers: true,
-    bigNumberStrings: true,
+    bigNumberStrings: true
   },
   omitNull: false,
   native: false,
@@ -19,26 +19,22 @@ export const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
     underscored: false,
     freezeTableName: false,
     charset: 'utf8',
-    timestamps: false,
+    timestamps: false
   },
   pool: {
     max: 5,
     idle: 30000,
-    acquire: 60000,
-  },
+    acquire: 60000
+  }
 });
 
-export const executeSqlCommand = async function (
-  query: string,
-  bind: BindOrReplacements,
-  oneRecord = false
-) {
+export const executeSqlCommand = async function (query: string, bind: BindOrReplacements, oneRecord = false) {
   try {
     const result = await sequelize.query(query, {
       bind,
-      type: QueryTypes.RAW,
+      type: QueryTypes.SELECT,
       raw: true,
-      plain: oneRecord,
+      plain: oneRecord
     });
 
     return result;
