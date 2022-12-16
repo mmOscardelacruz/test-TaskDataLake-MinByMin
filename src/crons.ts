@@ -81,12 +81,12 @@ export class DebugControllers {
       // console.log('alertsReportController starter');
       // await alertsReportController();
       // console.log('alertsReportController end');
-      // console.log('canEventsReportController starter');
-      // await canEventsReportController();
-      // console.log('canEventsReportController end');
-      console.log('minByMinReportController starter');
-      await minByMinReportController();
-      console.log('minByMinReportController end');
+      console.log('canEventsReportController starter');
+      await canEventsReportController();
+      console.log('canEventsReportController end');
+      // console.log('minByMinReportController starter');
+      // await minByMinReportController();
+      // console.log('minByMinReportController end');
       // console.log('safetyReportController starter');
       // await safetyReportController();
       // console.log('safetyReportController end');

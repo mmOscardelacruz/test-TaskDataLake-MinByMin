@@ -16,13 +16,13 @@ class GeotabService {
     return await this.geotabHelper.getApi();
   }
 
-  async getDevices(): Promise<Device[]> {
+  async getDevices(deviceId:string): Promise<Device[]> {
     try {
       const api = await this.getApi();
       const devices: Device[] = await api.call('Get', {
         typeName: 'Device',
         search: {
-          id: 'b1731'
+          id: deviceId
         }
       });
 

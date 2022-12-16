@@ -8,7 +8,8 @@ import GeotabService from './services/GeotabService';
 import KOFDataLakeService from './services/KofDataLakeService';
 import MinuteByMinuteReportService from './services/MinuteByMinuteReportService';
 import SafetyReportService from './services/SafetyReportService';
-
+import MinByMinRepository from './db/repositories/MinByMinRepository';
+import EventsCanRepository from './db/repositories/EventsCanRepository';
 // const fromDate = moment.tz(timeZone).startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS');
 // const toDate = moment.tz(timeZone).endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS');
 
@@ -39,9 +40,9 @@ export const minByMinReportController = async () => {
 
   const geotabService = new GeotabService(goUsername, goPassword, goDatabase, goServer);
   const kofDataLakeService = new KOFDataLakeService();
-
+  const MinByMinRepositoryApp = new MinByMinRepository();
   //const deviceStatusInfoRepository = new DeviceStatusInfoRepository();
-  const MinByMinReportService = new MinuteByMinuteReportService(geotabService);
+  const MinByMinReportService = new MinuteByMinuteReportService(geotabService,MinByMinRepositoryApp);
 
   const reportMinByMinData = await MinByMinReportService.getData(fromDate, toDate);
 
@@ -56,8 +57,8 @@ export const canEventsReportController = async () => {
 
   const geotabService = new GeotabService(goUsername, goPassword, goDatabase, goServer);
   const kofDataLakeService = new KOFDataLakeService();
-
-  const CanEventsReportService = new CanEventsReportSerevice(geotabService);
+  const eventsCanRepository = new EventsCanRepository();
+  const CanEventsReportService = new CanEventsReportSerevice(geotabService,eventsCanRepository);
 
   const reportCanEventsData = await CanEventsReportService.getData(fromDate, toDate);
 
