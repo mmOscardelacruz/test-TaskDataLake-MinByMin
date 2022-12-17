@@ -6,9 +6,9 @@ export interface AlertsSpeedRelenti {
   DIA: string;
   HORA: string;
   TipoAlerta: string;
-  Indicador: string;
+  Indicador: number; //change to type number 
   TimeStart: string;
   TimeEnd: string;
-  Equipment: number;
+  Equipment: string; //change to type String
   ID_PROV: string;
 }

@@ -10,6 +10,10 @@ import MinuteByMinuteReportService from './services/MinuteByMinuteReportService'
 import SafetyReportService from './services/SafetyReportService';
 import MinByMinRepository from './db/repositories/MinByMinRepository';
 import EventsCanRepository from './db/repositories/EventsCanRepository';
+import AlertRalentiRepository from './db/repositories/AlertRalentiRepository';
+import AlertVelocRepository from './db/repositories/AlertVelocRepository';
+import EventSafetyNegativeRepository from './db/repositories/EventSafetyNegativeRepository';
+import EventSafetyPositiveRepository from './db/repositories/EventSafetyPositiveRepository';
 // const fromDate = moment.tz(timeZone).startOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS');
 // const toDate = moment.tz(timeZone).endOf('day').utc().format('YYYY-MM-DDTHH:mm:ss.SSS');
 
@@ -25,7 +29,7 @@ export const safetyReportController = async () => {
 
   const deviceStatusInfoRepository = new DeviceStatusInfoRepository();
 
-  const safetyReportService = new SafetyReportService(geotabService, deviceStatusInfoRepository);
+  const safetyReportService = new SafetyReportService(geotabService, EventSafetyNegativeRepository,EventSafetyPositiveRepository);
 
   const reportSafetyData = await safetyReportService.getData(fromDate, toDate);
 
@@ -75,7 +79,7 @@ export const alertsReportController = async () => {
   const kofDataLakeService = new KOFDataLakeService();
 
   //const deviceStatusInfoRepository = new DeviceStatusInfoRepository();
-  const reportAlertsReportService = new AlertsReportService(geotabService);
+  const reportAlertsReportService = new AlertsReportService(geotabService,AlertVelocRepository,AlertRalentiRepository);
 
   const reportAlertsData = await reportAlertsReportService.getData(fromDate, toDate);
 

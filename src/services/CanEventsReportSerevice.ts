@@ -83,7 +83,7 @@ export default class MinuteByMinuteReportService {
           LONGITUD: eventsCan.Longitude,
           DIA: Date,
           HORA: Time,
-          ID_PROV: ''
+          ID_PROV: '02'
         };
         return res;
       },

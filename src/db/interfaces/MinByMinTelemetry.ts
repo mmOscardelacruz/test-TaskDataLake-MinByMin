@@ -7,5 +7,4 @@ export interface MinByMinTelemetry {
   VEL: number,
   STAT_MOT: boolean,
   NUM_ECON: string
-  //T de zona
 }

@@ -79,7 +79,7 @@ export default class CanEventsReportSerevice {
           VEL: minByMin.VEL,
           KM: mileage,
           TZ: device.timeZoneId,
-          ID_PROV: ''
+          ID_PROV: '02'
         };
 
         return res;

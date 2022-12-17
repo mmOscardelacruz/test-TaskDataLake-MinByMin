@@ -5,32 +5,43 @@ import moment from 'moment-timezone';
 import DeviceStatusInfoRepository from '../db/repositories/DeviceStatusInfoRepository';
 import { TelemetrySafetiSapi } from '../interfaces/TelemetrySafetiSapi';
 import GeotabService from './GeotabService';
+import EventSafetyNegativeRepository from '../db/repositories/EventSafetyNegativeRepository';
+import EventSafetyPositiveRepository from '../db/repositories/EventSafetyPositiveRepository';
 
 export default class SafetyReportService {
   constructor(
     private readonly geotabService: GeotabService,
-    private readonly deviceStatusInfoRepository: DeviceStatusInfoRepository
+    private readonly eventSafetyNeg: EventSafetyNegativeRepository,
+    private readonly eventSafetyPos: EventSafetyPositiveRepository
   ) {}
 
   async getData(fromDate: string, toDate: string): Promise<any[]> {
-    const deviceId = 'b1731';
+    
 
-    const devices = await this.geotabService.getDevices();
-    const dbDevices = await this.deviceStatusInfoRepository.get(fromDate, toDate);
-
+    console.time('Groups');
     const groups = await this.geotabService.getGroups();
+    console.timeEnd('Groups');
 
-    const allDevicesStatusInfo = await this.geotabService.getDeviceStatusInfo();
+    console.time('dbEventSafetyNeg');
+    const dbEventSafetyNeg = await this.eventSafetyNeg.get();
 
-    const result = await Bluebird.map(
-      allDevicesStatusInfo,
-      async dsi => {
-        const deviceId = dsi.device.id;
-        const device = devices.find(d => d.id === deviceId);
+    console.time('dbEventSafetyPos');
+    const dbEventSafetyPos = await this.eventSafetyPos.get();
+
+
+    console.timeEnd('dbEventSafetyNeg');
+    console.timeEnd('dbEventSafetyPos');
+
+    const safetyNeg = await Bluebird.map(
+      dbEventSafetyNeg, async safetyEvents => {
+        const deviceId = safetyEvents.DeviceId;
+        const deviceGeotab = await this.geotabService.getDevices(deviceId); //deviceId
+        const device = deviceGeotab.find(d => d.id === deviceId);
 
         if (!device) {
           return;
         }
+
         const deviceGroups = device.groups.map(x => groups.find(y => y.id === x.id));
         const deviceGroupsFiltered = deviceGroups.filter(g => g?.name?.includes('|'));
         const isValidGroup = deviceGroups.some(g => g?.name?.includes('|'));
@@ -38,72 +49,83 @@ export default class SafetyReportService {
         if (!isValidGroup) {
           return;
         }
-        const diagnosticAccelerationForwardEvents = await this.geotabService.getStatusData(
-          fromDate,
-          toDate,
-          'DiagnosticAccelerationForwardBrakingId',
-          deviceId
-        );
-
-        const diagnosticAccelerationSideToSideEvents = await this.geotabService.getStatusData(
-          fromDate,
-          toDate,
-          'DiagnosticAccelerationSideToSideId',
-          deviceId
-        );
 
         const uo = deviceGroupsFiltered.map(g => g?.name?.toString().replaceAll('|', '')).join(',');
-        const diagnosticAccelerationSideToSideDataPositive = diagnosticAccelerationForwardEvents.map(event => {
-          if (event.data > 0) {
-            return event.data;
-          } else {
-            return;
-          }
-        });
-        const hardBrakingEventsData = diagnosticAccelerationForwardEvents.map(event => {
-          if (event.data < 0) {
-            return event.data;
-          } else {
-            return;
-          }
-        });
-        const curveAccelerationData = diagnosticAccelerationSideToSideEvents.map(event => event.data ?? 0);
-
-        const acelGMax = max(diagnosticAccelerationSideToSideDataPositive) ?? 0;
-        const acelGProm = mean(diagnosticAccelerationSideToSideDataPositive) ?? 0;
-
-        const date = moment(dsi.dateTime);
+        const date = moment(safetyEvents.Hora_Dia);
         const Date = date.format('YYYY-MM-DD');
         const Time = date.format('HH:mm:ss');
 
-        const frenGMax = max(hardBrakingEventsData) ?? 0;
-        const frenGProm = mean(hardBrakingEventsData) ?? 0;
-
-        const turnGMax = max(curveAccelerationData) ?? 0;
-        const turnGProm = mean(curveAccelerationData) ?? 0;
 
         const res: TelemetrySafetiSapi = {
           MAND: '',
           VWERK: uo,
-          NUM_ECON: device.name,
-          ACEL_G_MAX: acelGMax,
-          ACEL_G_PROM: acelGProm,
-          LATITUD: dsi.latitude,
-          LONGITUD: dsi.longitude,
+          NUM_ECON: safetyEvents.NUM_ECON,
+          ACEL_G_MAX: safetyEvents.ACEL_G_MAX,
+          ACEL_G_PROM: safetyEvents.ACEL_G_PROM,
+          LATITUD: safetyEvents.Latitude,
+          LONGITUD: safetyEvents.Longitude,
           DIA: Date,
           HORA: Time,
-          FRENO_G_MAX: frenGMax,
-          FRENO_G_PROM: frenGProm,
-          GIRO_PROM: turnGMax,
-          GIRO_MAX: turnGProm,
-          ID_PROV: ''
+          FRENO_G_MAX:  safetyEvents.Freno_G_MAZ,
+          FRENO_G_PROM: safetyEvents.Freno_G_PROM,
+          GIRO_PROM:  safetyEvents.GIRO_Prom,
+          GIRO_MAX: safetyEvents.GIRO_Max,
+          ID_PROV: '02'
         };
 
         return res;
       },
       { concurrency: 20 }
     ).filter(x => typeof x !== 'undefined');
+      //////////////////////POSITIVE
+      const safetyPos = await Bluebird.map(
+        dbEventSafetyPos, async safetyEventsPos => {
+          const deviceId = safetyEventsPos.DeviceId;
+          const deviceGeotab = await this.geotabService.getDevices(deviceId); //deviceId
+          const device = deviceGeotab.find(d => d.id === deviceId);
+  
+          if (!device) {
+            return;
+          }
+  
+          const deviceGroups = device.groups.map(x => groups.find(y => y.id === x.id));
+          const deviceGroupsFiltered = deviceGroups.filter(g => g?.name?.includes('|'));
+          const isValidGroup = deviceGroups.some(g => g?.name?.includes('|'));
+  
+          if (!isValidGroup) {
+            return;
+          }
+  
+          const uo = deviceGroupsFiltered.map(g => g?.name?.toString().replaceAll('|', '')).join(',');
+          const date = moment(safetyEventsPos.Hora_Dia);
+          const Date = date.format('YYYY-MM-DD');
+          const Time = date.format('HH:mm:ss');
+  
+  
+          const res: TelemetrySafetiSapi = {
+            MAND: '',
+            VWERK: uo,
+            NUM_ECON: safetyEventsPos.NUM_ECON,
+            ACEL_G_MAX: safetyEventsPos.ACEL_G_MAX,
+            ACEL_G_PROM: safetyEventsPos.ACEL_G_PROM,
+            LATITUD: safetyEventsPos.Latitude,
+            LONGITUD: safetyEventsPos.Longitude,
+            DIA: Date,
+            HORA: Time,
+            FRENO_G_MAX:  safetyEventsPos.Freno_G_MAZ,
+            FRENO_G_PROM: safetyEventsPos.Freno_G_PROM,
+            GIRO_PROM:  safetyEventsPos.GIRO_Prom,
+            GIRO_MAX: safetyEventsPos.GIRO_Max,
+            ID_PROV: '02'
+          };
+  
+          return res;
+        },
+        { concurrency: 20 }
+      ).filter(x => typeof x !== 'undefined');
 
-    return result;
+
+
+    return safetyNeg.concat(safetyPos);
   }
 }
