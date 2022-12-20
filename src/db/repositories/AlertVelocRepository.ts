@@ -13,7 +13,9 @@ export default class AlertVelocRepository {
       if(code !== 200){
         throw new Error(message);
       }
+      console.time('VelocRepository');
       return data as AlertVelocInterface[];
+      console.timeEnd('VelocRepository');
     } catch (error) {
       console.error(error);
       throw error;

@@ -13,7 +13,9 @@ export default class AlertRalentiRepository {
       if(code !== 200){
         throw new Error(message);
       }
+      console.time('ralentiRepository');
       return data as AlertRalentiInterface[];
+      console.timeEnd('ralentiRepository');
     } catch (error) {
       console.error(error);
       throw error;

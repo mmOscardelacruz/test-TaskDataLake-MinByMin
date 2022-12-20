@@ -28,12 +28,13 @@ export const safetyReportController = async () => {
   const kofDataLakeService = new KOFDataLakeService();
 
   const deviceStatusInfoRepository = new DeviceStatusInfoRepository();
-
-  const safetyReportService = new SafetyReportService(geotabService, EventSafetyNegativeRepository,EventSafetyPositiveRepository);
+  const EventSafetyNegativeRepositoryApp = new EventSafetyNegativeRepository();
+  const EventSafetyPositiveRepositoryApp = new EventSafetyPositiveRepository();
+  const safetyReportService = new SafetyReportService(geotabService,EventSafetyNegativeRepositoryApp,EventSafetyPositiveRepositoryApp);
 
   const reportSafetyData = await safetyReportService.getData(fromDate, toDate);
 
-  // await kofDataLakeService.sendSafetyReport(reportSafetyData);
+  await kofDataLakeService.sendSafetyReport(reportSafetyData);
 
   console.log('Enviando info');
 };
@@ -77,13 +78,14 @@ export const alertsReportController = async () => {
 
   const geotabService = new GeotabService(goUsername, goPassword, goDatabase, goServer);
   const kofDataLakeService = new KOFDataLakeService();
-
+  const AlertVelocRepositoryApp = new AlertVelocRepository();
+  const AlertRalentiRepositoryApp = new AlertRalentiRepository();
   //const deviceStatusInfoRepository = new DeviceStatusInfoRepository();
-  const reportAlertsReportService = new AlertsReportService(geotabService,AlertVelocRepository,AlertRalentiRepository);
+  const reportAlertsReportService = new AlertsReportService(geotabService,AlertVelocRepositoryApp,AlertRalentiRepositoryApp);
 
   const reportAlertsData = await reportAlertsReportService.getData(fromDate, toDate);
 
-  // await kofDataLakeService.sendAlertsReport(reportAlertsData);
+  await kofDataLakeService.sendAlertsReport(reportAlertsData);
 
   console.log('Enviando info');
 };

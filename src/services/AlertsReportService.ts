@@ -18,12 +18,12 @@ export default class AlertsReportService {
   ) {}
 
 
-  async getData(fromDate: string, toDate: string): Promise<[]> {
+  async getData(fromDate: string, toDate: string): Promise<any[]> {
     
 
-    console.time('Groups');
+    console.time('GroupsAlert');
     const groups = await this.geotabService.getGroups();
-    console.timeEnd('Groups');
+    console.timeEnd('GroupsAlert');
 
     console.time('dbAlertRalent');
     const dbAlertRalent = await this.alertRalent.get();
@@ -35,6 +35,7 @@ export default class AlertsReportService {
     console.timeEnd('dbAlertRalent');
     console.timeEnd('dbAlertVeloc');
 
+    console.time('serviceRalenti');
     const ralenti = await Bluebird.map(
       dbAlertRalent, async alertServRalenti => {
         const deviceId = alertServRalenti.DevID;
@@ -80,9 +81,10 @@ export default class AlertsReportService {
       },
       { concurrency: 20 }
     ).filter(x => typeof x !== 'undefined');
-      
+      console.timeEnd('serviceRalenti');
     /////////////////////////       VELOCIDAD   ////////////////////////////
 
+    console.time('velocService');
     const velocidad = await Bluebird.map(
       dbAlertVeloc, async alertServVeloc => {
       const deviceId = alertServVeloc.DevID;
@@ -126,6 +128,7 @@ export default class AlertsReportService {
   },
   { concurrency: 20 }
 ).filter(x => typeof x !== 'undefined');
+    console.timeEnd('velocService');
     return ralenti.concat(velocidad);
   }
 }

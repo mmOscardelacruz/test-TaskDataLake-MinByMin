@@ -58,7 +58,7 @@ export default class SafetyReportService {
 
         const res: TelemetrySafetiSapi = {
           MAND: '',
-          VWERK: uo,
+          VWERK: uo.slice(0,4),
           NUM_ECON: safetyEvents.NUM_ECON,
           ACEL_G_MAX: safetyEvents.ACEL_G_MAX,
           ACEL_G_PROM: safetyEvents.ACEL_G_PROM,
@@ -124,7 +124,7 @@ export default class SafetyReportService {
         { concurrency: 20 }
       ).filter(x => typeof x !== 'undefined');
 
-
+      // return safetyNeg;
 
     return safetyNeg.concat(safetyPos);
   }
