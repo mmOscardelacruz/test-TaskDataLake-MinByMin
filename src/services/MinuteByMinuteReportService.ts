@@ -2,7 +2,7 @@ import Bluebird from 'bluebird';
 import { max, min } from 'lodash';
 import moment from 'moment-timezone';
 
-import MinByMinTelemetryRepository from '../db/repositories/MinByMinRepository';
+import MinByMinRepository from '../db/repositories/MinByMinRepository';
 import { MinByMinTelemetry } from '../interfaces/MinByMinTelemetry';
 // import {}
 import GeotabService from './GeotabService';
@@ -10,7 +10,7 @@ import GeotabService from './GeotabService';
 export default class CanEventsReportSerevice {
   constructor(
     private readonly geotabService: GeotabService, 
-    private readonly MinByMinRepository: MinByMinTelemetryRepository
+    private readonly MinByMinRepository: MinByMinRepository
   ) {}
 
   // async getMileage(fromDate: string, toDate: string, deviceId: string): Promise<number> {

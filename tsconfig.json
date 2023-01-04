@@ -9,8 +9,7 @@
     "strict": true,
     "sourceMap": true,
     "outDir": "dist",
-    "resolveJsonModule": true,
-    "allowJs": true
+    "resolveJsonModule": true
   },
   "include": ["src/**/*"]
 }
