@@ -8,7 +8,7 @@ import GeotabService from './services/GeotabService';
 import KOFDataLakeService from './services/KofDataLakeService';
 import MinuteByMinuteReportService from './services/MinuteByMinuteReportService';
 import SafetyReportService from './services/SafetyReportService';
-import MinByMinRepository from './db/repositories/MinByMinRepository';
+import MinByMinTelemetryRepository from './db/repositories/MinByMinRepository';
 import EventsCanRepository from './db/repositories/EventsCanRepository';
 import AlertRalentiRepository from './db/repositories/AlertRalentiRepository';
 import AlertVelocRepository from './db/repositories/AlertVelocRepository';
@@ -45,7 +45,7 @@ export const minByMinReportController = async () => {
 
   const geotabService = new GeotabService(goUsername, goPassword, goDatabase, goServer);
   const kofDataLakeService = new KOFDataLakeService();
-  const MinByMinRepositoryApp = new MinByMinRepository();
+  const MinByMinRepositoryApp = new MinByMinTelemetryRepository();
   //const deviceStatusInfoRepository = new DeviceStatusInfoRepository(); nonecesario
   const MinByMinReportService = new MinuteByMinuteReportService(geotabService,MinByMinRepositoryApp);
 
