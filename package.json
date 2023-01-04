@@ -9,8 +9,7 @@
     "build": "tsc",
     "lint": "eslint --ignore-path .gitignore . --ext .ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest --verbose",
-    "postinstall": "$(yarn bin)/pm2 install typecsript"
+    "test": "jest --verbose"
   },
   "keywords": [],
   "author": "",
