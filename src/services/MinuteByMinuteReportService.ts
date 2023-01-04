@@ -86,7 +86,7 @@ export default class CanEventsReportSerevice {
       },
       { concurrency: 20 }
     ).filter(x => typeof x !== 'undefined');
-
     return result;
+    
   }
 }

@@ -9,7 +9,7 @@ export default class AlertVelocRepository {
       const query = `SELECT public.getalertasvelocidad();`;
       const [res] = Object.values(await executeSqlCommand(query,[],true));
       const {code,data,message} = res as SQLMetricaResponse;
-      
+   
       if(code !== 200){
         throw new Error(message);
       }

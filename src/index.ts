@@ -1,8 +1,8 @@
-import { alertsReportCron, canEventsReportCron, DebugControllers, minByMinReportCron, safetyReportCron } from './crons';
-
+import { minByMinReportCron } from './crons';
+// import { alertsReportCron, canEventsReportCron, DebugControllers, minByMinReportCron, safetyReportCron } from './crons';
 // safetyReportCron.start();
-// minByMinReportCron.start();
+  minByMinReportCron.start();
 // canEventsReportCron.start();
 // alertsReportCron.start();
 
-DebugControllers.start();
+// DebugControllers.start();

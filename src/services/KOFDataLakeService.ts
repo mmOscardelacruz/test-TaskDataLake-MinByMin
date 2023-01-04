@@ -59,13 +59,14 @@ export default class KOFDataLakeService {
       data,
       headers
     });
+    // console.log('Respuesta ->', response);
     console.log('Respuesta ->', response.data);
-    if (response.status !== 200) {
-      throw response.data;
-    }
-    if (response.data.error) {
-      throw response.data.error;
-    }
+    // if (response.status !== 200) {
+    //   throw response.data;
+    // }
+    // if (response.data.error) {
+    //   throw response.data.error;
+    // }
     return response.data;
   }
 
@@ -106,13 +107,13 @@ export default class KOFDataLakeService {
       data,
       headers
     });
-
-    if (response.status !== 200) {
-      throw response.data;
-    }
-    if (response.data.error) {
-      throw response.data.error;
-    }
+    console.log('Respuesta ->', response.data);
+    // if (response.status !== 200) {
+    //   throw response.data;
+    // }
+    // if (response.data.error) {
+    //   throw response.data.error;
+    // }
     return response.data;
   }
 }

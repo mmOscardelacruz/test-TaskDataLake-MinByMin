@@ -1,22 +1,53 @@
 import { connected } from 'process';
+import { Device } from '../../interfaces/Geotab/Devices';
 import { executeSqlCommand } from '../index';
 import { EventsCanInterface } from '../interfaces/EventsCanInterface';
 import { SQLMetricaResponse } from '../interfaces/SQLMetricaResponse';
 
 export default class EventsCanRepository {
-  async get(): Promise<EventsCanInterface[]> {
+  public async get(): Promise<EventsCanInterface[]> {
     try {
       const query = `SELECT public.geteventoscan();`;
       const [res] = Object.values(await executeSqlCommand(query,[],true));
       const {code,data,message} = res as SQLMetricaResponse;
+      const rpms: number[] = data.map(colum => colum.RPM_id);
+      console.log(rpms);
+      const queryUpd = `SELECT public.update_inserted(ids_rows string[]);`;
+      const resUpd = await executeSqlCommand(queryUpd,[rpms],false);
+      console.log(resUpd);
       
       if(code !== 200){
         throw new Error(message);
       }
+      
+      
       return data as EventsCanInterface[];
+      
+      
+      
     } catch (error) {
       console.error(error);
       throw error;
     }
   }
+
+  
+  //  public async update(RPM_ids:number[]):Promise<void>{
+  //   try {
+      
+  //     const queryUpd = `SELECT public.update_inserted(ids_rows string[]);`;
+  //     const [resUpd] = Object.values(await executeSqlCommand(queryUpd,[],true));
+  //     const {code,data,message} = resUpd as SQLMetricaResponse;
+
+  //     if(code !== 200){
+  //       throw new Error(message);
+  //     }
+  //     return ;
+
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw error;
+  //   }
+  // }
 }
+
