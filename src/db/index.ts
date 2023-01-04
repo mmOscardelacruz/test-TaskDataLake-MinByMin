@@ -1,6 +1,6 @@
 import { BindOrReplacements, QueryTypes, Sequelize } from 'sequelize';
 
-import config from '../../src/config';
+import config from '../config';
 
 const { dbHost, dbName, dbPassword, dbPort, dbUser } = config.db;
 
