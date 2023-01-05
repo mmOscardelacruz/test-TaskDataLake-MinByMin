@@ -5,7 +5,7 @@ import DeviceStatusInfoRepository from './db/repositories/DeviceStatusInfoReposi
 import AlertsReportService from './services/AlertsReportService';
 import CanEventsReportSerevice from './services/CanEventsReportSerevice';
 import GeotabService from './services/GeotabService';
-import KOFDataLakeService from './services/KofDataLakeService';
+import KOFDataLakeService from './services/KOFDataLakeService';
 import MinuteByMinuteReportService from './services/MinuteByMinuteReportService';
 import SafetyReportService from './services/SafetyReportService';
 import MinByMinTelemetryRepository  from './db/repositories/MinByMinRepository';
