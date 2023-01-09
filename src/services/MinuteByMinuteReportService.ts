@@ -34,7 +34,7 @@ export default class  MinuteByMinuteReportService{
     
   async getData(fromDate: string, toDate: string): Promise<any[]> {
     try {
-      console.log(this.devicesList);
+      // console.log(this.devicesList);
       // const deviceId = 'b1731';
       // const devices = await this.geotabService.getDevices();
       // const groups = await this.geotabService.getGroups();
@@ -42,14 +42,14 @@ export default class  MinuteByMinuteReportService{
 
       // const result =  MinByMinRepository.map( 
       // )
-      console.time('Groups');
+      // console.time('Groups');
       const groups = await this.geotabService.getGroups();
-      console.timeEnd('Groups');
+      // console.timeEnd('Groups');
 
-      console.time('dbMbM');
+      // console.time('dbMbM');
       const dbMinbyMin = await this.MinByMinRepository.get();
 
-      console.timeEnd('dbMbM');
+      // console.timeEnd('dbMbM');
       let i=0;
       const result = await Bluebird.map(
         dbMinbyMin, async minByMin => {

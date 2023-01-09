@@ -50,7 +50,7 @@ export const minByMinReportController = async () => {
   const MinByMinReportService = new MinuteByMinuteReportService(geotabService,MinByMinRepositoryApp);
   await MinByMinReportService.getDevicesInit();
   const reportMinByMinData = await MinByMinReportService.getData(fromDate, toDate);
-console.log(reportMinByMinData);
+// console.log(reportMinByMinData);
   await kofDataLakeService.sendMinByMinReport(reportMinByMinData); 
 
   console.log('Enviando info');
