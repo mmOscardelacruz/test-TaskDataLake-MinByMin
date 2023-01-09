@@ -9,7 +9,7 @@ export default class AlertRalentiRepository {
       const query = `SELECT public.getalertasralenti();`;
       const [res] = Object.values(await executeSqlCommand(query,[],true));
       const {code,data,message} = res as SQLMetricaResponse;
-      
+      console.log(data.length);
       if(code !== 200){
         throw new Error(message);
       }

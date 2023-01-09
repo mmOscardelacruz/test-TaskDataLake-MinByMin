@@ -9,17 +9,24 @@ import GeotabService from './GeotabService';
 // import { AlertRalentiInterface } from '../db/interfaces/AlertRalentiInterface';
 import AlertVelocRepository from '../db/repositories/AlertVelocRepository';
 import AlertRalentiRepository from '../db/repositories/AlertRalentiRepository';
-
+import { Device } from '../interfaces/Geotab/Devices';
+import { Group } from '../interfaces/Geotab/Group';
 export default class AlertsReportService {
+  devicesList: Device[] = []
   constructor(
     private readonly geotabService: GeotabService, 
     private readonly alertVeloc: AlertVelocRepository,
     private readonly alertRalent: AlertRalentiRepository
   ) {}
 
-
+  async getDevicesInit (){
+    const deviceGeotab: Device[] = await this.geotabService.getDevicesAux();
+    this.devicesList =  deviceGeotab;
+   }
+   
   async getData(fromDate: string, toDate: string): Promise<any[]> {
-    
+    try {
+      console.log(this.devicesList);
 
     console.time('GroupsAlert');
     const groups = await this.geotabService.getGroups();
@@ -36,47 +43,52 @@ export default class AlertsReportService {
     console.timeEnd('dbAlertVeloc');
 
     console.time('serviceRalenti');
+    let i = 0;
     const ralenti = await Bluebird.map(
       dbAlertRalent, async alertServRalenti => {
         const deviceId = alertServRalenti.DevID;
-        const deviceGeotab = await this.geotabService.getDevices(deviceId); //deviceId
+        // const deviceGeotab = await this.geotabService.getDevices(deviceId); //deviceId
+        const deviceGeotab = this.devicesList;
         const device = deviceGeotab.find(d => d.id === deviceId);
-
-        if (!device) {
-          return;
-        }
-
+        i ++;
+        if(i === 100 || i === 500 || i === 1000 || i === 1200){
+          console.log(i);
+          }
+        if (device != undefined) {
+          
         const deviceGroups = device.groups.map(x => groups.find(y => y.id === x.id));
         const deviceGroupsFiltered = deviceGroups.filter(g => g?.name?.includes('|'));
         const isValidGroup = deviceGroups.some(g => g?.name?.includes('|'));
 
-        if (!isValidGroup) {
-          return;
+        if (isValidGroup === true) {
+          const uo = deviceGroupsFiltered.map(g => g?.name?.toString().replaceAll('|', '')).join(',');
+          const date = moment(alertServRalenti.DIA_HORA);
+          const Date = date.format('YYYY-MM-DD');
+          const Time = date.format('HH:mm:ss');
+  
+  
+  
+          const res: AlertsSpeedRelenti = {
+            VWERK: uo,
+            NUM_ECON: alertServRalenti.NUM_ECON,
+            LATITUD: alertServRalenti.Latitude,
+            LONGITUD: alertServRalenti.Longitude,
+            DIA: Date,
+            HORA: Time,
+            TipoAlerta: alertServRalenti.TipoAlerta,
+            Indicador: alertServRalenti.Indicador,
+            TimeStart: alertServRalenti.TimeStart,
+            TimeEnd: alertServRalenti.TimeEnd,
+            Equipment: alertServRalenti.Equipment,
+            ID_PROV: '02'
+          };
+          return res;
+          //
         }
 
-        const uo = deviceGroupsFiltered.map(g => g?.name?.toString().replaceAll('|', '')).join(',');
-        const date = moment(alertServRalenti.DIA_HORA);
-        const Date = date.format('YYYY-MM-DD');
-        const Time = date.format('HH:mm:ss');
+       
+        }
 
-
-
-        const res: AlertsSpeedRelenti = {
-          VWERK: uo,
-          NUM_ECON: alertServRalenti.NUM_ECON,
-          LATITUD: alertServRalenti.Latitude,
-          LONGITUD: alertServRalenti.Longitude,
-          DIA: Date,
-          HORA: Time,
-          TipoAlerta: alertServRalenti.TipoAlerta,
-          Indicador: alertServRalenti.Indicador,
-          TimeStart: alertServRalenti.TimeStart,
-          TimeEnd: alertServRalenti.TimeEnd,
-          Equipment: alertServRalenti.Equipment,
-          ID_PROV: '02'
-        };
-        return res;
-        //
 
       },
       { concurrency: 20 }
@@ -130,6 +142,11 @@ export default class AlertsReportService {
 ).filter(x => typeof x !== 'undefined');
     console.timeEnd('velocService');
     return ralenti.concat(velocidad);
+}catch(error){
+  console.log(error);
+      return [];
+}
+
   }
 }
   

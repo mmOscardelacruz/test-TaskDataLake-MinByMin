@@ -11,7 +11,7 @@ export default class MinByMinTelemetryRepository {
       if (code !== 200) {
         throw new Error(message);
       }
-      // console.log(data);
+      console.log(data.length);
       return data as MinByMinTelemetry[];
     } catch (error) {
       console.error(error);

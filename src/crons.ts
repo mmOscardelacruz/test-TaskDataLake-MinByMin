@@ -11,6 +11,11 @@ import config from './config';
 const { cronExpression } = config.cron;
 const { timeZone } = config;
 
+// setTimeout(async () => {
+//   console.log('safetyReportCron starter');
+//   await safetyReportController();
+// },8000)
+
 // export const safetyReportCron = new CronJob(
 //   cronExpression,
 //   async () => {
@@ -27,6 +32,11 @@ const { timeZone } = config;
 //   timeZone
 // );
 
+// setTimeout(async () => {
+//   console.log('minByMinReportCron starter');
+//   await minByMinReportController();
+// },8000)
+
 export const minByMinReportCron = new CronJob(
   cronExpression,
   async () => {
@@ -42,6 +52,11 @@ export const minByMinReportCron = new CronJob(
   true,
   timeZone
 );
+
+// setTimeout(async () => {
+//   console.log(' canEventsReportCron starter');
+//   await minByMinReportController();
+// },8000)
 
 // export const canEventsReportCron = new CronJob(
 //   cronExpression,

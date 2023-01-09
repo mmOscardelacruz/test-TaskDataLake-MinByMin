@@ -33,6 +33,21 @@ class GeotabService {
     }
   }
 
+  async getDevicesAux(): Promise<Device[]> {
+    try {
+      const api = await this.getApi();
+      const devices: Device[] = await api.call('Get', {
+        typeName: 'Device',
+        
+      });
+
+      return devices;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+
   async getGroups(): Promise<Group[]> {
     try {
       const api = await this.getApi();

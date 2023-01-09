@@ -10,11 +10,11 @@ export default class EventsCanRepository {
       const query = `SELECT public.geteventoscan();`;
       const [res] = Object.values(await executeSqlCommand(query,[],true));
       const {code,data,message} = res as SQLMetricaResponse;
-      const rpms: number[] = data.map(colum => colum.RPM_id);
-      console.log(rpms);
-      const queryUpd = `SELECT public.update_inserted(ids_rows string[]);`;
-      const resUpd = await executeSqlCommand(queryUpd,[rpms],false);
-      console.log(resUpd);
+      console.log(data.length);
+      const rpms = data.map(colum => colum.RPM_id);
+      const rpmsAux = '{'+rpms.toString()+'}'
+      const queryUpd = `SELECT public.update_inserted('${rpmsAux}');`;
+      const resUpd = await executeSqlCommand(queryUpd,[],true);
       
       if(code !== 200){
         throw new Error(message);

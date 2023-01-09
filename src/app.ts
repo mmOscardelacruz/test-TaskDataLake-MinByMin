@@ -33,7 +33,7 @@ export const safetyReportController = async () => {
   const safetyReportService = new SafetyReportService(geotabService,EventSafetyNegativeRepositoryApp,EventSafetyPositiveRepositoryApp);
 
   const reportSafetyData = await safetyReportService.getData(fromDate, toDate);
-
+  console.log(reportSafetyData);
   await kofDataLakeService.sendSafetyReport(reportSafetyData);
 
   console.log('Enviando info');
@@ -48,9 +48,9 @@ export const minByMinReportController = async () => {
   const MinByMinRepositoryApp = new MinByMinTelemetryRepository();
   //const deviceStatusInfoRepository = new DeviceStatusInfoRepository(); nonecesario
   const MinByMinReportService = new MinuteByMinuteReportService(geotabService,MinByMinRepositoryApp);
-
+  await MinByMinReportService.getDevicesInit();
   const reportMinByMinData = await MinByMinReportService.getData(fromDate, toDate);
-
+console.log(reportMinByMinData);
   await kofDataLakeService.sendMinByMinReport(reportMinByMinData); 
 
   console.log('Enviando info');
@@ -66,9 +66,9 @@ export const canEventsReportController = async () => {
   const CanEventsReportService = new CanEventsReportSerevice(geotabService,eventsCanRepository);
 
   const reportCanEventsData = await CanEventsReportService.getData(fromDate, toDate);
-
-  //await kofDataLakeService.sendCanEventsReport(reportCanEventsData);
-
+  console.log(reportCanEventsData);
+  await kofDataLakeService.sendCanEventsReport(reportCanEventsData);
+  
   console.log('Enviando info');
 };
 
@@ -84,7 +84,7 @@ export const alertsReportController = async () => {
   const reportAlertsReportService = new AlertsReportService(geotabService,AlertVelocRepositoryApp,AlertRalentiRepositoryApp);
 
   const reportAlertsData = await reportAlertsReportService.getData(fromDate, toDate);
-
+  console.log(reportAlertsData);
   await kofDataLakeService.sendAlertsReport(reportAlertsData);
 
   console.log('Enviando info');

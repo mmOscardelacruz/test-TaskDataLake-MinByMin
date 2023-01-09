@@ -1,5 +1,9 @@
 import config from '../config';
+import { AlertsSpeedRelenti } from '../interfaces/AlertsSpeedRelenti';
+import { CanEventTelemetry } from '../interfaces/CanEventTelemetry';
 import { MinByMinTelemetry } from '../interfaces/MinByMinTelemetry';
+import { TelemetrySafetiSapi } from '../interfaces/TelemetrySafetiSapi';
+
 import HttpAdapter from '../utils/helpers/HttpAdapter';
 
 const {
@@ -23,11 +27,11 @@ export default class KOFDataLakeService {
     this.httpAdapter = new HttpAdapter();
   }
 
-  async sendSafetyReport(data: any) {
+  async sendSafetyReport(data: TelemetrySafetiSapi[]) {
     const auth = Buffer.from(`${safetyUser}:${safetyPassword}`).toString('base64');
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: auth
+      Authorization: `Basic ${auth}`
     };
     const url = safetyURL;
     const response = await this.httpAdapter.request({
@@ -36,13 +40,13 @@ export default class KOFDataLakeService {
       data,
       headers
     });
-
-    if (response.status !== 200) {
-      throw response.data;
-    }
-    if (response.data.error) {
-      throw response.data.error;
-    }
+    console.log('Respuesta ->', response.data);
+    // if (response.status !== 200) {
+    //   throw response.data;
+    // }
+    // if (response.data.error) {
+    //   throw response.data.error;
+    // }
     return response.data;
   }
 
@@ -70,11 +74,11 @@ export default class KOFDataLakeService {
     return response.data;
   }
 
-  async sendCanEventsReport(data: any) {
+  async sendCanEventsReport(data: CanEventTelemetry[]) {
     const auth = Buffer.from(`${canEventsUser}:${canEventsPassword}`).toString('base64');
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: auth
+      Authorization: `Basic ${auth}`
     };
     const url = canEventsURL;
     const response = await this.httpAdapter.request({
@@ -85,20 +89,20 @@ export default class KOFDataLakeService {
     });
     console.log('Respuesta ->', response.data);
 
-    if (response.status !== 200) {
-      throw response.data;
-    }
-    if (response.data.error) {
-      throw response.data.error;
-    }
+    // if (response.status !== 200) {
+    //   throw response.data;
+    // }
+    // if (response.data.error) {
+    //   throw response.data.error;
+    // }
     return response.data;
   }
 
-  async sendAlertsReport(data: any) {
+  async sendAlertsReport(data: AlertsSpeedRelenti[]) {
     const auth = Buffer.from(`${alertsSpeedRpmUser}:${alertsSpeedRpmPassword}`).toString('base64');
     const headers = {
       'Content-Type': 'application/json',
-      Authorization: auth
+      Authorization: `Basic ${auth}`
     };
     const url = alertsSpeedRpmURL;
     const response = await this.httpAdapter.request({
